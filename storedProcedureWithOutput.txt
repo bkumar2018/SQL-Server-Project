@@ -12,4 +12,10 @@ End
 --To execute stored procedure with output parameter
 Declare @EmpTotal int
 Execute spGetEmpCountByGender 'female', @EmpTotal output
-print @EmpTotal
+if(@EmpTotal is null)
+	print '@EmpTotal is null'
+else
+	print @EmpTotal 
+	print '@EmpTotal is not null'
+
+
