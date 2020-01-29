@@ -1,0 +1,92 @@
+use testDB
+
+-- If Table exists drop recreate
+If (Exists (select * 
+			from INFORMATION_SCHEMA.TABLES
+			where TABLE_NAME = 'tblProductSales'))
+Begin
+	Drop Table tblProductSales
+End
+
+If  (Exists (select * 
+			from INFORMATION_SCHEMA.TABLES
+			where TABLE_NAME = 'tblProducts'))
+Begin
+	Drop Table tblProductSales
+End
+
+
+
+Create Table tblProducts 
+(
+	[Id] int identity primary key,
+	[Name] nvarchar(50),
+	[Description] nvarchar(250)
+)
+
+
+Create Table tblProductSales 
+(
+	Id int identity primary key,
+	ProductId int foreign key references tblProducts(Id),
+	UnitPrice int,
+	QuantitySold int
+)
+
+--Insert sample data 
+Declare @Id int
+Set @Id = 1
+
+While(@Id <= 10 )
+Begin
+	Insert into tblProducts values ('Product - '+ CAST(@Id as nvarchar(20)),
+	'Product -' + CAST(@Id as nvarchar(20)) + ' Description' )
+
+	Print @Id
+	Set @Id = @Id + 1
+End
+
+Select * from tblProducts;
+Select * from tblProductSales;
+
+
+
+
+-- To get random number between 1 - 5
+Declare @LLForProductId int
+Declare @ULForProductId int
+Set @LLForProductId = 1
+Set @ULForProductId = 20
+
+
+Declare @LLForUnitPrice int
+Declare @ULForUnitPrice int
+Set @LLForUnitPrice = 1
+Set @ULForUnitPrice = 10
+
+
+Declare @LLForQuantitySold int
+Declare @ULForQuantitySold int
+Set @LLForQuantitySold = 1
+Set @ULForQuantitySold = 5
+
+--Select ROUND(((@UL - @LL)*RAND()+1), 0)
+Declare @Counter int
+Set @Counter = 1
+
+Declare @RandomProductId int
+Declare @RandomUnitPrice int
+Declare @RandomQuantitySold int
+
+while(@Counter <=25)
+Begin
+	Select @RandomProductId = ROUND(((@ULForProductId - @LLForProductId)*RAND()+1), 0)
+	Select @RandomUnitPrice = ROUND(((@ULForProductId - @LLForProductId)*RAND()+1), 0)
+	Select @RandomQuantitySold = ROUND(((@ULForProductId - @LLForProductId)*RAND()+1), 0)
+
+	Insert into tblProductSales
+	values (@RandomProductId, @RandomUnitPrice, @RandomQuantitySold)
+
+	Print @Counter
+	Set @Counter = @Counter +1
+End
