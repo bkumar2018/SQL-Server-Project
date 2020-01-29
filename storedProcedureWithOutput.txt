@@ -1,0 +1,15 @@
+-- Create stored procedure with output parameter
+create proc spGetEmpCountByGender
+@Gender nvarchar(20),
+@EmpCount int output
+as
+Begin
+	select @EmpCount = count(Id) 
+	from tblEmp 
+	where gender = @Gender
+End
+
+--To execute stored procedure with output parameter
+Declare @EmpTotal int
+Execute spGetEmpCountByGender 'female', @EmpTotal output
+print @EmpTotal
