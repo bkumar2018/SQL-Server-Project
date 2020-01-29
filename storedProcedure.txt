@@ -1,0 +1,37 @@
+ 
+use sampleDB
+
+select * from tblEmp;
+
+CREATE PROCEDURE spGetEmployees
+AS
+BEGIN
+	select * from tblEmp
+END
+
+-- security, reducing network trafic
+CREATE PROCEDURE spGetDept
+AS
+BEGIN
+	select * from tblDept
+END
+
+
+spGetEmployees
+spGetDept
+
+
+
+--Parameter stored procedures which takes parameters
+Create Proc spGetEmpByGenderAndDept
+@Gender nvarchar(20),
+@DeptId int
+as
+Begin
+	Select name, gender, DepartmentId 
+	from tblEmp
+	where gender = @Gender
+	and DepartmentId = @DeptId
+End
+
+spGetEmpByGenderAndDept 'male', 3
